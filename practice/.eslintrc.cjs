@@ -21,8 +21,12 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    'react/prop-types': 'off',
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
   },
   settings: {
