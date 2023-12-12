@@ -9,6 +9,10 @@ function App() {
 
   return (
     <>
+      {/* <Hello name='Kim' age={20}>
+        <h3>Children of Hello</h3>
+      </Hello> */}
+
       {count && <Title txt={`Vite + React ${count}`} />}
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
