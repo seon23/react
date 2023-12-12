@@ -4,7 +4,7 @@ import Title from './components/TItle';
 function App() {
   return (
     <>
-      <Title title='React Tutorial' />
+      <Title title='React Tutorial'>sub title: react basic</Title>
     </>
   );
 }
