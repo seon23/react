@@ -16,6 +16,7 @@ const Box = ({
   margin,
   children,
 }: PropsWithChildren<Props>) => {
+  console.log('render Box');
   return (
     <div style={{ borderWidth, borderColor, borderStyle, padding, margin }}>
       {children}

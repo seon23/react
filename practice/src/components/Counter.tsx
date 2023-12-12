@@ -4,6 +4,8 @@ type Props = {
 };
 
 const Counter = ({ incrementCount, decrementCount }: Props) => {
+  console.log('render Counter.');
+
   return (
     <>
       <button onClick={incrementCount}>+1</button>
