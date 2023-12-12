@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import Hello from './components/Hello';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -9,10 +10,9 @@ function App() {
 
   return (
     <>
-      {/* <Hello name='Kim' age={20}>
-        <h3>Children of Hello</h3>
-      </Hello> */}
-
+      <Hello name='Kim' age={20}>
+        <strong>Children of Component Hello</strong>
+      </Hello>
       {count && <Title txt={`Vite + React ${count}`} />}
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
