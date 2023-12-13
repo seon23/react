@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useRef } from 'react';
 import './App.css';
 import Box from './components/Box';
 import Counter from './components/Counter';
@@ -6,7 +6,8 @@ import Title from './components/TItle';
 
 function App() {
   const [count, setCount] = useState(0);
-  const [subTitle, setSubTitle] = useState('sub title 변경하기');
+  const [subTitle, setSubTitle] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -17,8 +18,11 @@ function App() {
     setCount(count - 1);
   };
 
-  const changeSubTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setSubTitle(e.currentTarget.value);
+  // const changeSubTitle = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setSubTitle(e.currentTarget.value);
+  // };
+  const changeSubTitle = () => {
+    setSubTitle(inputRef.current?.value || '');
   };
 
   return (
@@ -39,7 +43,9 @@ function App() {
           decrementCount={decrementCount}
         />
         <div>
-          <input type='text' value={subTitle} onChange={changeSubTitle} />
+          {/* <input type='text' value={subTitle} onChange={changeSubTitle} /> */}
+          <input type='text' ref={inputRef} />
+          <button onClick={changeSubTitle}>입력</button>
         </div>
       </Box>
     </>
