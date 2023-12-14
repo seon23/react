@@ -1,8 +1,8 @@
-import { ChangeEvent, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 import Box from './components/Box';
 import Counter from './components/Counter';
-import Title from './components/TItle';
+import Title from './components/Title';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -43,7 +43,7 @@ function App() {
           decrementCount={decrementCount}
         />
         <div>
-          {/* <input type='text' value={subTitle} onChange={changeSubTitle} /> */}
+          <input type='text' value={subTitle} onChange={changeSubTitle} />
           <input type='text' ref={inputRef} />
           <button onClick={changeSubTitle}>입력</button>
         </div>
