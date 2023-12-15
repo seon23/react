@@ -1,27 +1,18 @@
-import { Cart, Session, LoginUser } from '../App';
 import Profile from './Profile';
-import Login, { LoginHandle } from './Login';
-import { FormEvent, RefObject, useRef } from 'react';
+// import Login, { LoginHandle } from './Login';
+import Login from './Login';
+// import { FormEvent, RefObject, useRef } from 'react';
+import { FormEvent, useRef } from 'react';
+import { useSession } from '../hooks/session-context';
 
-type Props = {
-  session: Session;
-  login: ({ id, name }: LoginUser) => void;
-  logout: () => void;
-  loginHandleRef: RefObject<LoginHandle>;
-  saveCartItem: (name: string, price: number) => void;
-  removeCartItem: (itemId: number) => void;
-};
-
-// const My = ({session, login, logout}: Props) => {
-const My = ({
-  session: { loginUser, cart },
-  login,
-  logout,
-  loginHandleRef,
-  saveCartItem,
-  removeCartItem,
-}: Props) => {
+const My = () => {
   console.log('Render My!');
+
+  const {
+    session: { loginUser, cart },
+    saveCartItem,
+    removeCartItem,
+  } = useSession();
 
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
@@ -48,11 +39,7 @@ const My = ({
   return (
     <>
       {/* 1. 로그인 폼 또는 프로필 */}
-      {loginUser ? (
-        <Profile loginUser={loginUser} logout={logout} />
-      ) : (
-        <Login login={login} ref={loginHandleRef} />
-      )}
+      {loginUser ? <Profile /> : <Login />}
       <hr />
       {/* 2. 아이템 목록 */}
       <ul>
