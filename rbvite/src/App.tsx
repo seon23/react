@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import './App.css';
 import Hello from './components/Hello';
 import My from './components/My';
@@ -19,6 +19,23 @@ const SampleSession = {
     { id: 200, name: '파', price: 5000 },
   ],
 };
+
+type ChildHandler = {
+  appendPeriod: () => void;
+};
+
+// 여기서 ref는 ChildComponent의 ref 어트리뷰트?
+const ChildComponent = forwardRef((_, ref) => {
+  const [childText, setChildText] = useState('.');
+
+  const handler: ChildHandler = {
+    // setChildText에서 이전 값 c가 필요한 이유는?
+    appendPeriod: () => setChildText((c) => c + '.'),
+  };
+  // ref, 즉 부모에서 생성한 ref object(ChildComponent를 참조하는)의 current prop에 handler 연결?
+  useImperativeHandle(ref, () => handler);
+  return <>childComp: {childText}</>;
+});
 
 function App() {
   console.log('Render App!');
@@ -41,8 +58,15 @@ function App() {
     });
   };
 
+  const childRef = useRef<ChildHandler>(null);
   return (
     <>
+      {/* 부모인 App에서 childRef를 통해 ChildComponent에 접근 가능! */}
+      <ChildComponent ref={childRef} />
+      <hr />
+      <button onClick={() => childRef.current?.appendPeriod()}>
+        Call Child Component
+      </button>
       <Hello name='Kim' age={20} incrementCount={incrementCount}>
         환영합니다!
       </Hello>
