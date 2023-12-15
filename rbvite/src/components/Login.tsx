@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useRef } from 'react';
 import { LoginUser } from '../App';
 
 type Props = {
@@ -8,23 +8,28 @@ type Props = {
 const Login = ({ login }: Props) => {
   console.log('Render Login!');
 
-  const [id, setId] = useState(0);
-  const [name, setName] = useState('');
+  const idRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    // action 기능 차단?
+    e.preventDefault();
+    const id = Number(idRef.current?.value);
+    const name = nameRef.current?.value || '';
+    login({ id, name });
+  };
 
   return (
     <>
-      <div>
-        Login ID(숫자):{' '}
-        <input
-          type='number'
-          onChange={(e) => setId(Number(e.currentTarget.value))}
-        />
-      </div>
-      <div>
-        Login Name:{' '}
-        <input type='text' onChange={(e) => setName(e.currentTarget.value)} />
-      </div>
-      <button onClick={() => login({ id, name })}>Login</button>
+      <form onSubmit={submit}>
+        <div>
+          Login ID(숫자): <input type='number' ref={idRef} />
+        </div>
+        <div>
+          Login Name: <input type='text' ref={nameRef} />
+        </div>
+        <button type='submit'>Login</button>
+      </form>
     </>
   );
 };
