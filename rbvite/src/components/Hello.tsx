@@ -7,11 +7,11 @@ type Props = {
 };
 
 const Hello = ({ name, age, children }: PropsWithChildren<Props>) => {
-  const { incrementCount } = useCounter();
+  const { count, incrementCount } = useCounter();
   return (
     <>
       <h2>
-        Hello, {name} ({age}세)
+        Hello, {name} ({age}세) [{count}]
       </h2>
       <h3>{children}</h3>
       <button onClick={incrementCount}>count + 1</button>

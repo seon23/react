@@ -6,6 +6,7 @@ import {
   useRef,
 } from 'react';
 import { useSession } from '../hooks/session-context';
+import { useCounter } from '../hooks/counter-context';
 
 export type LoginHandle = {
   focusName: () => void;
@@ -15,8 +16,19 @@ const Login = forwardRef((_, handleRef) => {
   console.log('Render Login!');
 
   const { login } = useSession();
+  const { count, incrementCount, decrementCount } = useCounter();
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    incrementCount();
+    console.log('Login Please...', count);
+
+    return () => {
+      decrementCount();
+      console.log('login-cleanup-code!!, count');
+    };
+  }, []);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     // action 기능 차단?

@@ -1,7 +1,7 @@
 import { useSession } from '../hooks/session-context';
 
 const Profile = () => {
-  console.log('Render Profile!');
+  // console.log('Render Profile!');
   const {
     logout,
     session: { loginUser },

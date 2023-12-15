@@ -11,18 +11,21 @@ type CounterContextProps = {
   count: number;
   //   setCount: Dispatch<SetStateAction<number>>;
   incrementCount: () => void;
+  decrementCount: () => void;
 };
 const CounterContext = createContext<CounterContextProps>({
   count: 0,
   incrementCount: () => {},
+  decrementCount: () => {},
 });
 
 const CounterContextProvider = ({ children }: PropsWithChildren) => {
   const [count, setCount] = useState(0);
 
   const incrementCount = () => setCount(count + 1);
+  const decrementCount = () => setCount((count) => count - 1);
   return (
-    <CounterContext.Provider value={{ count, incrementCount }}>
+    <CounterContext.Provider value={{ count, incrementCount, decrementCount }}>
       {children}
     </CounterContext.Provider>
   );
