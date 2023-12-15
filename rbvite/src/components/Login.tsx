@@ -16,17 +16,17 @@ const Login = forwardRef((_, handleRef) => {
   console.log('Render Login!');
 
   const { login } = useSession();
-  const { count, incrementCount, decrementCount } = useCounter();
+  const { incrementCount, decrementCount } = useCounter();
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     incrementCount();
-    console.log('Login Please...', count);
+    // console.log('Login Please...', count);
 
     return () => {
       decrementCount();
-      console.log('login-cleanup-code!!, count');
+      // console.log('login-cleanup-code!!', count);
     };
   }, []);
 
