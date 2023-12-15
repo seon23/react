@@ -4,7 +4,7 @@ import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
 
 const My = () => {
-  console.log('Render My!');
+  // console.log('Render My!');
 
   const {
     session: { loginUser, cart },

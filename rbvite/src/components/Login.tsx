@@ -13,7 +13,7 @@ export type LoginHandle = {
 };
 
 const Login = forwardRef((_, handleRef) => {
-  console.log('Render Login!');
+  // console.log('Render Login!');
 
   const { login } = useSession();
   const { incrementCount, decrementCount } = useCounter();

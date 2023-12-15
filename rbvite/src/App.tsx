@@ -11,6 +11,7 @@ import My from './components/My';
 import { useCounter } from './hooks/counter-context';
 import { useTimer } from './hooks/timer-hooks';
 import { MemoHello } from './components/Hello';
+import { SessionContextProvider } from './hooks/session-context';
 
 type ChildHandler = {
   appendPeriod: () => void;
@@ -68,21 +69,23 @@ function App() {
   const age = useMemo(() => count + 1, []);
 
   return (
-    <>
-      {/* 부모인 App에서 childRef를 통해 ChildComponent에 접근 가능! */}
-      <ChildComponent ref={childRef} />
-      <hr />
-      <button onClick={() => childRef.current?.appendPeriod()}>
-        Call Child Component
-      </button>
-      <MemoHello age={age} fn={fn} />
-      <hr />
-      <My
-      // loginHandleRef={loginHandleRef}
-      />
-      <h2>Count: {count}</h2>
-      <button onClick={decrementCount}>Decrement</button>
-    </>
+    <SessionContextProvider>
+      <>
+        {/* 부모인 App에서 childRef를 통해 ChildComponent에 접근 가능! */}
+        <ChildComponent ref={childRef} />
+        <hr />
+        <button onClick={() => childRef.current?.appendPeriod()}>
+          Call Child Component
+        </button>
+        <MemoHello age={age} fn={fn} />
+        <hr />
+        <My
+        // loginHandleRef={loginHandleRef}
+        />
+        <h2>Count: {count}</h2>
+        <button onClick={decrementCount}>Decrement</button>
+      </>
+    </SessionContextProvider>
   );
 }
 
