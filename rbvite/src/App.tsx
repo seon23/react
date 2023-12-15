@@ -28,11 +28,17 @@ function App() {
 
   const incrementCount = () => setCount(count + 1);
   const login = ({ id, name }: LoginUser) => {
-    if (!name) alert('Input name, please!');
+    if (!name) return alert('Input name, please!');
     setSession({ ...session, loginUser: { id, name } });
   };
   const logout = () => {
     setSession({ ...session, loginUser: null });
+  };
+  const removeCartItem = (itemId: number) => {
+    setSession({
+      ...session,
+      cart: session.cart.filter((item) => item.id !== itemId),
+    });
   };
 
   return (
@@ -41,7 +47,12 @@ function App() {
         환영합니다!
       </Hello>
       <hr />
-      <My session={session} login={login} logout={logout} />
+      <My
+        session={session}
+        login={login}
+        logout={logout}
+        removeCartItem={removeCartItem}
+      />
       <h2>Count: {count}</h2>
     </>
   );
