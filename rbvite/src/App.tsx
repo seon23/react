@@ -57,7 +57,17 @@ function App() {
       cart: session.cart.filter((item) => item.id !== itemId),
     });
   };
-
+  const saveCartItem = (name: string, price: number) => {
+    const id =
+      session.cart
+        .map((cart) => cart.id)
+        .sort()
+        .at(-1) || 0;
+    setSession({
+      ...session,
+      cart: [...session.cart, { id: id + 1, name, price }],
+    });
+  };
   const childRef = useRef<ChildHandler>(null);
   return (
     <>
@@ -75,6 +85,7 @@ function App() {
         session={session}
         login={login}
         logout={logout}
+        saveCartItem={saveCartItem}
         removeCartItem={removeCartItem}
       />
       <h2>Count: {count}</h2>
