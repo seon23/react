@@ -1,6 +1,7 @@
 import {
   PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -45,7 +46,9 @@ type Action =
 
 const SKEY = 'SESSION';
 
-const setStorage = (session: Session) => {
+// const setStorage = (session: Session) => {
+const setStorage = (session: Session | undefined) => {
+  if (!session) return;
   const { loginUser, cart } = session;
   sessionStorage.setItem(SKEY, JSON.stringify(loginUser));
   localStorage.setItem(SKEY, JSON.stringify(cart));
@@ -91,11 +94,11 @@ const reducer = (session: Session, action: Action) => {
   return newer;
 };
 export const SessionContextProvider = ({ children }: PropsWithChildren) => {
+  const storedData = getStorage();
   const [session, dispatch] = useReducer(reducer, DEFAULT_SESSION);
 
   //   const url = '/data/sample-logined.json';
   const url = '/data/sample.json';
-  const storedData = getStorage();
 
   // const [data, setData] = useState<T | undefined>(cachedData);
   const data = useFetch<Session>(url, storedData);
@@ -106,34 +109,38 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
 
   // const loginHandleRef = useRef<LoginHandle>(null);
 
-  const login = ({ id, name }: LoginUser) => {
+  const login = useCallback(({ id, name }: LoginUser) => {
     if (!name) {
       alert('Input name, please!');
       //   loginHandleRef.current?.focusName();
       return;
     }
     dispatch({ type: ActionType.LOGIN, payload: { id, name } });
-  };
-  const logout = () => {
+  }, []);
+  const logout = useCallback(() => {
     dispatch({ type: ActionType.LOGOUT, payload: null });
-  };
-  const saveCartItem = (id: number, name: string, price: number) => {
-    const { cart } = session;
-    //   추가할 때는 find해봐야 안 나옴. 수정할 때만 find 사용하도록 바꾸어보자.
-    // -> id가 있다면 find해라!
-    const item = id && cart.find((item) => item.id === id);
-    if (item) {
-      id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
-      item.name = name;
-      item.price = price;
-    } else {
-      cart.push({ id, name, price });
-    }
-    dispatch({ type: ActionType.SAVE_ITEM, payload: cart });
-  };
-  const removeCartItem = (itemId: number) => {
+    // }, [session]);
+  }, []);
+  const saveCartItem = useCallback(
+    (id: number, name: string, price: number) => {
+      const { cart } = session;
+      //   추가할 때는 find해봐야 안 나옴. 수정할 때만 find 사용하도록 바꾸어보자.
+      // -> id가 있다면 find해라!
+      const item = id && cart.find((item) => item.id === id);
+      if (item) {
+        item.name = name;
+        item.price = price;
+      } else {
+        id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
+        cart.push({ id, name, price });
+      }
+      dispatch({ type: ActionType.SAVE_ITEM, payload: cart });
+    },
+    [session]
+  );
+  const removeCartItem = useCallback((itemId: number) => {
     dispatch({ type: ActionType.REMOVE_ITEM, payload: itemId });
-  };
+  }, []);
 
   return (
     <SessionContext.Provider

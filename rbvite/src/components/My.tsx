@@ -1,112 +1,30 @@
 import Profile from './Profile';
-import Login from './Login';
-import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
 import './My.css';
-import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const My = () => {
   // console.log('Render My!');
 
   const {
-    session: { loginUser, cart },
-    saveCartItem,
-    removeCartItem,
+    session: { loginUser },
   } = useSession();
 
-  const itemIdRef = useRef<number>(0);
-  const itemNameRef = useRef<HTMLInputElement>(null);
-  const itemPriceRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  // if (!loginUser) navigate('/login');
+  useEffect(() => {
+    if (!loginUser) navigate('/login');
+  }, [navigate, loginUser]);
 
-  const [hasDirty, setDirty] = useState(false);
-
-  const checkDirty = () => {
-    const id = itemIdRef.current;
-    const name = itemNameRef.current?.value;
-    const price = itemPriceRef.current?.value;
-
-    const selectedItem = !id
-      ? { name: '', price: '' }
-      : cart.find((item) => item.id === id) || { name: '', price: '' };
-
-    setDirty(name !== selectedItem.name || price != selectedItem.price);
-  };
-  const setCartItem = (id: number) => {
-    itemIdRef.current = id;
-    const selectedItem = cart.find((item) => item.id === id) || {
-      name: '',
-      price: 0,
-    };
-    if (itemNameRef.current && itemPriceRef.current) {
-      itemNameRef.current.value = selectedItem?.name;
-      itemPriceRef.current.value = selectedItem?.price.toString();
-    }
-  };
-
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const name = itemNameRef.current?.value;
-    const price = itemPriceRef.current?.value;
-
-    if (!name) {
-      alert('상품명을 정확히 입력해 주세요!');
-      return itemNameRef.current?.focus();
-    }
-    if (!price) {
-      alert('가격을 정확히 입력해 주세요!');
-      return itemPriceRef.current?.focus();
-    }
-
-    saveCartItem(itemIdRef.current, name, Number(price));
-    itemNameRef.current.value = '';
-    itemPriceRef.current.value = '';
-    setDirty(false);
-  };
-
+  // My에서는 profile만 보여줄 건데, 문제는 logout되어 있을 때는 profile이 아닌 login
+  // login페이지에서는 로그인 되어 있다면 my로 보내야한다.
   return (
     <>
-      {/* 1. 로그인 폼 또는 프로필 */}
-      {loginUser ? (
-        <Profile />
-      ) : (
-        <div className={clsx('green-border')}>
-          <Login />
-        </div>
-      )}
-      <hr />
-      {/* 2. 아이템 목록 */}
-      <ul>
-        {cart.map(({ id, name, price }: Cart) => (
-          <>
-            <li key={id}>
-              <small>{id}</small>{' '}
-              <button
-                onClick={() => setCartItem(id)}
-                style={{
-                  paddingTop: 0,
-                  paddingBottom: '0.2rem',
-                  backgroundColor: 'inherit',
-                }}
-                title='수정'
-              >
-                <strong>{name}</strong>
-              </button>
-              <small>({price.toLocaleString()}원)</small>
-              <button onClick={() => removeCartItem(id)}>X</button>
-            </li>
-          </>
-        ))}
-        <form onSubmit={submit}>
-          <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
-          <input
-            type='number'
-            ref={itemPriceRef}
-            onChange={() => checkDirty()}
-          />
-          {hasDirty && <button type='submit'>Save</button>}
-        </form>
-      </ul>
+      {/* <div className={clsx({ 'green-border': !loginUser })}>
+        {loginUser ? <Profile /> : <Login />}
+      </div> */}
+      <Profile />
     </>
   );
 };

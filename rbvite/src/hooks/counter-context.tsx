@@ -33,10 +33,10 @@ const reducer = (count: number, { type, payload = 1 }: Action) => {
 };
 
 const CounterContextProvider = ({ children }: PropsWithChildren) => {
-  const [count, dispach] = useReducer(reducer, 0);
+  const [count, dispatch] = useReducer(reducer, 0);
   // const incrementCount = () => dispach({ type: 'plus', payload: 2 });
-  const incrementCount = () => dispach({ type: 'plus', payload: 1 });
-  const decrementCount = () => dispach({ type: 'minus' });
+  const incrementCount = () => dispatch({ type: 'plus', payload: 1 });
+  const decrementCount = () => dispatch({ type: 'minus' });
   return (
     <CounterContext.Provider value={{ count, incrementCount, decrementCount }}>
       {children}

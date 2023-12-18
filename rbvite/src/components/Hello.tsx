@@ -1,23 +1,18 @@
-import { memo, useEffect, useId, useReducer } from 'react';
+import { memo, useId, useReducer } from 'react';
 
 type Props = {
   // name: string;
   // age: number;
 
   age: number;
-  fn: () => void;
 };
 
 // const Hello = ({ name, age, children }: PropsWithChildren<Props>) => {
-export const Hello = ({ age, fn }: Props) => {
+export const Hello = ({ age }: Props) => {
   // const { count, incrementCount } = useCounter();
   const helloId = useId();
 
   const [isActive, toggleActive] = useReducer((preActive) => !preActive, false);
-
-  useEffect(() => {
-    console.log('child.fn>>>', age, fn());
-  }, [age, fn]);
 
   return (
     <div style={{ border: '2px solid red' }}>
