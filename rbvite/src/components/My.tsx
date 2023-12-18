@@ -1,5 +1,6 @@
 import Profile from './Profile';
 import Login from './Login';
+<<<<<<< HEAD
 import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
 
@@ -61,6 +62,25 @@ const My = () => {
     itemPriceRef.current.value = '';
     setDirty(false);
   };
+=======
+
+type Props = {
+  session: Session;
+  login: ({ id, name }: LoginUser) => void;
+  logout: () => void;
+  removeCartItem: (itemId: number) => void;
+};
+
+// const My = ({session, login, logout}: Props) => {
+const My = ({
+  session: { loginUser, cart },
+  login,
+  logout,
+  removeCartItem,
+}: Props) => {
+  console.log('Render My!');
+
+>>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
   return (
     <>
       {/* 1. 로그인 폼 또는 프로필 */}
@@ -71,6 +91,7 @@ const My = () => {
         {cart.map(({ id, name, price }: Cart) => (
           <>
             <li key={id}>
+<<<<<<< HEAD
               <small>{id}</small>{' '}
               <button
                 onClick={() => setCartItem(id)}
@@ -85,9 +106,14 @@ const My = () => {
               </button>
               <small>({price.toLocaleString()}원)</small>
               <button onClick={() => removeCartItem(id)}>X</button>
+=======
+              {name}({price.toLocaleString()}원)
+>>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
             </li>
+            <button onClick={() => removeCartItem(id)}>X</button>
           </>
         ))}
+<<<<<<< HEAD
         <form onSubmit={submit}>
           <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
           <input
@@ -97,6 +123,8 @@ const My = () => {
           />
           {hasDirty && <button type='submit'>Save</button>}
         </form>
+=======
+>>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
       </ul>
     </>
   );

@@ -61,36 +61,60 @@ const ChildComponent = forwardRef((_, ref) => {
 function App() {
   console.log('Render App!');
 
-  const { count, incrementCount, decrementCount } = useCounter();
-  // const { count, decrementCount } = useCounter();
+  const [count, setCount] = useState(0);
+  const [session, setSession] = useState<Session>(SampleSession);
+
+  const incrementCount = () => setCount(count + 1);
+  const login = ({ id, name }: LoginUser) => {
+    if (!name) return alert('Input name, please!');
+    setSession({ ...session, loginUser: { id, name } });
+  };
+  const logout = () => {
+    setSession({ ...session, loginUser: null });
+  };
+  const removeCartItem = (itemId: number) => {
+    setSession({
+      ...session,
+      cart: session.cart.filter((item) => item.id !== itemId),
+    });
+  };
+  const saveCartItem = (name: string, price: number) => {
+    const id =
+      session.cart
+        .map((cart) => cart.id)
+        .sort()
+        .at(-1) || 0;
+    setSession({
+      ...session,
+      cart: [...session.cart, { id: id + 1, name, price }],
+    });
+  };
   const childRef = useRef<ChildHandler>(null);
 
   const fn = useCallback(() => 'FN!', []);
   const age = useMemo(() => count + 1, []);
 
   return (
-    <SessionContextProvider>
-      <>
-        {/* 부모인 App에서 childRef를 통해 ChildComponent에 접근 가능! */}
-        <ChildComponent ref={childRef} />
-        <hr />
-        <button onClick={() => childRef.current?.appendPeriod()}>
-          Call Child Component
-        </button>
-        <MemoHello age={age} fn={fn} />
-        <hr />
-        <My
-        // loginHandleRef={loginHandleRef}
-        />
-        <h2>Count: {count}</h2>
-        <button onClick={decrementCount}>Decrement</button>
-        <div className={count % 2 === 0 ? 'card' : ''}>
-          <button onClick={incrementCount}>
-            count is {count > 0 ? 'Big' : 'Zero'}
-          </button>
-        </div>
-      </>
-    </SessionContextProvider>
+    <>
+      {/* 부모인 App에서 childRef를 통해 ChildComponent에 접근 가능! */}
+      <ChildComponent ref={childRef} />
+      <hr />
+      <button onClick={() => childRef.current?.appendPeriod()}>
+        Call Child Component
+      </button>
+      <Hello name='Kim' age={20} incrementCount={incrementCount}>
+        환영합니다!
+      </Hello>
+      <hr />
+      <My
+        session={session}
+        login={login}
+        logout={logout}
+        saveCartItem={saveCartItem}
+        removeCartItem={removeCartItem}
+      />
+      <h2>Count: {count}</h2>
+    </>
   );
 }
 
