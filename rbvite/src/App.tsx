@@ -61,8 +61,8 @@ const ChildComponent = forwardRef((_, ref) => {
 function App() {
   console.log('Render App!');
 
-  // const { count, incrementCount, decrementCount } = useCounter();
-  const { count, decrementCount } = useCounter();
+  const { count, incrementCount, decrementCount } = useCounter();
+  // const { count, decrementCount } = useCounter();
   const childRef = useRef<ChildHandler>(null);
 
   const fn = useCallback(() => 'FN!', []);
@@ -84,6 +84,11 @@ function App() {
         />
         <h2>Count: {count}</h2>
         <button onClick={decrementCount}>Decrement</button>
+        <div className={count % 2 === 0 ? 'card' : ''}>
+          <button onClick={incrementCount}>
+            count is {count > 0 ? 'Big' : 'Zero'}
+          </button>
+        </div>
       </>
     </SessionContextProvider>
   );
