@@ -12,6 +12,9 @@ import { useCounter } from './hooks/counter-context';
 import { useTimer } from './hooks/timer-hooks';
 import { MemoHello } from './components/Hello';
 import { SessionContextProvider } from './hooks/session-context';
+// import * as CN from 'classnames';
+import clsx from 'clsx';
+import classNames from 'classnames';
 
 type ChildHandler = {
   appendPeriod: () => void;
@@ -62,11 +65,12 @@ function App() {
   console.log('Render App!');
 
   const { count, incrementCount, decrementCount } = useCounter();
-  // const { count, decrementCount } = useCounter();
   const childRef = useRef<ChildHandler>(null);
 
   const fn = useCallback(() => 'FN!', []);
   const age = useMemo(() => count + 1, []);
+
+  const boldNRed = () => ['bold', 'red-colored'];
 
   return (
     <SessionContextProvider>
@@ -82,12 +86,20 @@ function App() {
         <My
         // loginHandleRef={loginHandleRef}
         />
-        <h2>Count: {count}</h2>
-        <button onClick={decrementCount}>Decrement</button>
-        <div className={count % 2 === 0 ? 'card' : ''}>
+        {/* <div className='card'> */}
+        {/* <div className={count % 2 === 0 ? 'card' : ''}> */}
+        <div className={classNames({ card: count % 2 === 0 })}>
           <button onClick={incrementCount}>
             count is {count > 0 ? 'Big' : 'Zero'}
           </button>
+          <button onClick={decrementCount}>Decrement</button>
+          <hr />
+          {/* <span className={clsx('card', { bold: count > 1 }, boxStyle())}> */}
+
+          <span className={clsx(boldNRed())}>
+            {/* <h2>Count: {count}</h2> */}
+            Count: {count}
+          </span>
         </div>
       </>
     </SessionContextProvider>

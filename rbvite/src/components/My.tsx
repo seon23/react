@@ -2,6 +2,8 @@ import Profile from './Profile';
 import Login from './Login';
 import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
+import './My.css';
+import clsx from 'clsx';
 
 const My = () => {
   // console.log('Render My!');
@@ -61,10 +63,17 @@ const My = () => {
     itemPriceRef.current.value = '';
     setDirty(false);
   };
+
   return (
     <>
       {/* 1. 로그인 폼 또는 프로필 */}
-      {loginUser ? <Profile /> : <Login />}
+      {loginUser ? (
+        <Profile />
+      ) : (
+        <div className={clsx('green-border')}>
+          <Login />
+        </div>
+      )}
       <hr />
       {/* 2. 아이템 목록 */}
       <ul>

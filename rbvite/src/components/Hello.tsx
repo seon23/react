@@ -22,11 +22,9 @@ export const Hello = ({ age, fn }: Props) => {
   return (
     <div style={{ border: '2px solid red' }}>
       <h5 id={helloId}>Hello, {age}</h5>
-      {/* <button onClick={incrementCount}>+count</button> */}
       <hr />
       {isActive ? 'Active' : 'Passive'}
       <button onClick={toggleActive}>Toggle</button>
-      {/* <Sample /> */}
     </div>
   );
 };
