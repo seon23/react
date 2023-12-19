@@ -73,6 +73,7 @@ function App() {
     setSession({ ...session, loginUser: null });
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
   const removeCartItem = (itemId: number) => {
     setSession({
       ...session,
@@ -96,6 +97,8 @@ function App() {
   const age = useMemo(() => count + 1, []);
 =======
 >>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
+=======
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
 
   return (
     <>
@@ -110,6 +113,7 @@ function App() {
       </Hello>
       <hr />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <My
         session={session}
         login={login}
@@ -117,6 +121,9 @@ function App() {
         saveCartItem={saveCartItem}
         removeCartItem={removeCartItem}
       />
+=======
+      <My session={session} login={login} logout={logout} />
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
 =======
       <My session={session} login={login} logout={logout} />
 >>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)

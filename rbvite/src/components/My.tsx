@@ -73,11 +73,7 @@ type Props = {
 // const My = ({session, login, logout}: Props) => {
 const My = ({ session: { loginUser, cart }, login, logout }: Props) => {
   console.log('Render My!');
-<<<<<<< HEAD
 
->>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
-=======
->>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
   return (
     <>
       {/* 1. 로그인 폼 또는 프로필 */}
@@ -86,48 +82,13 @@ const My = ({ session: { loginUser, cart }, login, logout }: Props) => {
       {/* 2. 아이템 목록 */}
       <ul>
         {cart.map(({ id, name, price }: Cart) => (
-<<<<<<< HEAD
           <>
             <li key={id}>
-<<<<<<< HEAD
-              <small>{id}</small>{' '}
-              <button
-                onClick={() => setCartItem(id)}
-                style={{
-                  paddingTop: 0,
-                  paddingBottom: '0.2rem',
-                  backgroundColor: 'inherit',
-                }}
-                title='수정'
-              >
-                <strong>{name}</strong>
-              </button>
-              <small>({price.toLocaleString()}원)</small>
-              <button onClick={() => removeCartItem(id)}>X</button>
-=======
               {name}({price.toLocaleString()}원)
->>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
             </li>
             <button onClick={() => removeCartItem(id)}>X</button>
           </>
-=======
-          <li key={id}>
-            {name}({price.toLocaleString()}원)
-          </li>
->>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
         ))}
-<<<<<<< HEAD
-        <form onSubmit={submit}>
-          <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
-          <input
-            type='number'
-            ref={itemPriceRef}
-            onChange={() => checkDirty()}
-          />
-          {hasDirty && <button type='submit'>Save</button>}
-        </form>
-=======
->>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
       </ul>
     </>
   );
