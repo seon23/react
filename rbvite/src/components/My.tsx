@@ -68,19 +68,16 @@ type Props = {
   session: Session;
   login: ({ id, name }: LoginUser) => void;
   logout: () => void;
-  removeCartItem: (itemId: number) => void;
 };
 
 // const My = ({session, login, logout}: Props) => {
-const My = ({
-  session: { loginUser, cart },
-  login,
-  logout,
-  removeCartItem,
-}: Props) => {
+const My = ({ session: { loginUser, cart }, login, logout }: Props) => {
   console.log('Render My!');
+<<<<<<< HEAD
 
 >>>>>>> parent of a17f1b8 (Add saveCartItem() and input form using useRef.)
+=======
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
   return (
     <>
       {/* 1. 로그인 폼 또는 프로필 */}
@@ -89,6 +86,7 @@ const My = ({
       {/* 2. 아이템 목록 */}
       <ul>
         {cart.map(({ id, name, price }: Cart) => (
+<<<<<<< HEAD
           <>
             <li key={id}>
 <<<<<<< HEAD
@@ -112,6 +110,11 @@ const My = ({
             </li>
             <button onClick={() => removeCartItem(id)}>X</button>
           </>
+=======
+          <li key={id}>
+            {name}({price.toLocaleString()}원)
+          </li>
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
         ))}
 <<<<<<< HEAD
         <form onSubmit={submit}>

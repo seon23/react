@@ -66,12 +66,13 @@ function App() {
 
   const incrementCount = () => setCount(count + 1);
   const login = ({ id, name }: LoginUser) => {
-    if (!name) return alert('Input name, please!');
+    if (!name) alert('Input name, please!');
     setSession({ ...session, loginUser: { id, name } });
   };
   const logout = () => {
     setSession({ ...session, loginUser: null });
   };
+<<<<<<< HEAD
   const removeCartItem = (itemId: number) => {
     setSession({
       ...session,
@@ -93,6 +94,8 @@ function App() {
 
   const fn = useCallback(() => 'FN!', []);
   const age = useMemo(() => count + 1, []);
+=======
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
 
   return (
     <>
@@ -106,6 +109,7 @@ function App() {
         환영합니다!
       </Hello>
       <hr />
+<<<<<<< HEAD
       <My
         session={session}
         login={login}
@@ -113,6 +117,9 @@ function App() {
         saveCartItem={saveCartItem}
         removeCartItem={removeCartItem}
       />
+=======
+      <My session={session} login={login} logout={logout} />
+>>>>>>> parent of b8538a6 (Add function removeCartItem to App.tsx)
       <h2>Count: {count}</h2>
     </>
   );
