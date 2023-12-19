@@ -5,8 +5,12 @@
   text-align: center;
 }
 
-nav ul {
+ul {
   list-style: none;
+}
+
+nav ul {
+  /* list-style: none; */
   display: flex;
   gap: 1rem;
   justify-content: center;

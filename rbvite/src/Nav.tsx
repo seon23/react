@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 export const Nav = () => {
@@ -9,6 +10,10 @@ export const Nav = () => {
             Home
           </Link>
         </li>
+        <li>
+          <NavLink to='/test'>Test</NavLink>
+        </li>
+
         <li>
           <Link to='/login'>Login</Link>
         </li>

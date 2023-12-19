@@ -10,6 +10,8 @@ import { useCounter } from './hooks/counter-context';
 import { SessionContextProvider } from './hooks/session-context';
 
 import { Route, Routes } from 'react-router-dom';
+import { Items } from './components/Items';
+import { Item } from './components/Item';
 import { ItemLayout } from './components/ItemLayout';
 
 function App() {
@@ -21,12 +23,14 @@ function App() {
     <SessionContextProvider>
       <Nav />
       <Routes>
-        {/* <Route path='/ttt' element={<h1>TTT</h1>}></Route> */}
         <Route path='/' element={<Home />} />
+        <Route path='/test' element={<h1>Test Page!</h1>}></Route>
         <Route path='/login' element={<Login />} />
         <Route path='/my' element={<My />} />
-        <Route path='/items' element={<ItemLayout />} />
-        {/* <Route path='/items/:id' element={<Item />} /> */}
+        <Route path='/items' element={<ItemLayout />}>
+          <Route index element={<Items />} />
+          <Route path='/items/:id' element={<Item />} />
+        </Route>
         <Route path='/hello' element={<MemoHello age={0} />} />
         <Route path='/*' element={<NotFound />}></Route>
       </Routes>

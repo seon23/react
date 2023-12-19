@@ -19,7 +19,6 @@ const ChildComponent = forwardRef((_, ref) => {
 
   useInterval(() => setBadCount((pre) => pre + 1), 1000);
   useInterval(() => setGoodCount((pre) => pre + 1), 1000);
-
   useTimeout(
     (initSec) => {
       setBadCount(initSec);

@@ -1,7 +1,14 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useTimer } from '../hooks/timer-hooks';
+
 export const NotFound = () => {
-  return (
-    <>
-      <h1>404: 페이지를 찾을 수 없습니다!</h1>
-    </>
-  );
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { useTimeout } = useTimer();
+
+  //   useTimeout(() => navigate('/'), 2000);
+  useTimeout(() => navigate(-1), 2000);
+
+  return <h1>404: {location.pathname} Page Not Found!</h1>;
+  //   return <Navigate to='/' />;
 };
