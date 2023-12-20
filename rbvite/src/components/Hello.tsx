@@ -1,38 +1,34 @@
-import { memo, useEffect, useId, useReducer } from 'react';
+import { PropsWithChildren, useId } from 'react';
 
 type Props = {
-  // name: string;
-  // age: number;
-
+  name?: string;
   age: number;
-  fn: () => void;
+  plusCount: () => void;
+  // children: React.ReactNode;
+  // children: React.ReactElement;
 };
 
-// const Hello = ({ name, age, children }: PropsWithChildren<Props>) => {
-export const Hello = ({ age, fn }: Props) => {
-  // const { count, incrementCount } = useCounter();
+const Hello = ({
+  name = 'CCC',
+  age,
+  plusCount,
+  children,
+}: PropsWithChildren<Props>) => {
+  console.log('Hello.age>>', age);
+
   const helloId = useId();
-
-  const [isActive, toggleActive] = useReducer((preActive) => !preActive, false);
-
-  useEffect(() => {
-    console.log('child.fn>>>', age, fn());
-  }, [age, fn]);
 
   return (
     <div style={{ border: '2px solid red' }}>
-      <h5 id={helloId}>Hello, {age}</h5>
-      {/* <button onClick={incrementCount}>+count</button> */}
-      <hr />
-      {isActive ? 'Active' : 'Passive'}
-      <button onClick={toggleActive}>Toggle</button>
-      {/* <Sample /> */}
+      <h5 id={helloId}>
+        Hello, {name} ({age}세)
+      </h5>
+      {children}
+      <button onClick={plusCount}>+count</button>
     </div>
   );
 };
 
-// export default Hello;
-export const MemoHello = memo(Hello, ({ age }, { age: age2 }) => {
-  console.log('🚀  prePorp:', age, age2);
-  return age === age2;
-});
+// Hello.defaultProps = { name: 'Choi' };
+
+export default Hello;

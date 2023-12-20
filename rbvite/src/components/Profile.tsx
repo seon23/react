@@ -1,25 +1,19 @@
-import { useEffect } from 'react';
-import { useSession } from '../hooks/session-context';
-import { useFetch } from '../hooks/fetch-hook';
+import { LoginUser } from '../App';
 
-const Profile = () => {
-  // console.log('Render Profile!');
-  const {
-    logout,
-    session: { loginUser },
-  } = useSession();
+type Props = {
+  loginUser: LoginUser;
+  logout: () => void;
+};
 
-  const url = '/data/sample.json';
-  const data = useFetch<Session>(url);
-  useEffect(() => {
-    if (data) console.log('🚀  data:', data);
-  }, [data]);
+const Profile = ({ loginUser, logout }: Props) => {
+  console.log('@@@Profile');
   return (
     <>
-      <div>User Name: {loginUser?.name}</div>
+      <div>
+        User Name: <strong>{loginUser.name}</strong>
+      </div>
       <button onClick={logout}>Logout</button>
     </>
   );
 };
-
 export default Profile;
