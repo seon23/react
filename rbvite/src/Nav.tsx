@@ -11,7 +11,13 @@ export const Nav = () => {
           </Link>
         </li>
         <li>
-          <NavLink to='/test'>Test</NavLink>
+          {/* NavLink 구현 */}
+          <NavLink
+            to='/test'
+            style={({ isActive }) => (isActive ? { color: 'red' } : {})}
+          >
+            Test
+          </NavLink>
         </li>
 
         <li>
@@ -30,3 +36,21 @@ export const Nav = () => {
     </nav>
   );
 };
+
+// export const NavLink = ({ style, classNames: Prop }) => {
+//   ...
+
+// useEffect(() => {
+//   if (typeof className ==== 'fn') {
+//   classNames({ isActive: to === location.pathname })
+//       })
+//     }
+//   })
+// }
+
+// <NavLink
+//   to='/my'
+//   style={({ isActive }) => (isActive ? { color: 'red' } : {})}
+// >
+//   My
+// </NavLink>;

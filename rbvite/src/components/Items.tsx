@@ -1,7 +1,5 @@
 import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
-import { Link } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 
 export const Items = () => {
   const {
@@ -67,9 +65,10 @@ export const Items = () => {
           <>
             <li key={id}>
               <small>{id}</small>{' '}
-              <Link to={`/items/${id}`} state={{ name, price }}>
+              {/* <Link to={`/items/${id}`} state={{ name, price }}>
                 <strong>{name}</strong>
-              </Link>
+              </Link> */}
+              <strong>{name}</strong>
               <small>({price.toLocaleString()}원)</small>
               <button onClick={() => removeCartItem(id)}>X</button>
             </li>
