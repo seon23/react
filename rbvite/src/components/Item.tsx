@@ -14,7 +14,10 @@ export const Item = () => {
 
   //   const location = useLocation();
   //   const { name, price } = location.state || { name: '0', price: 0 };
-  const { name, price } = cart.find((item) => item.id === Number(id));
+  const { name, price } = cart.find((item) => item.id === Number(id)) || {
+    name: '0',
+    price: 0,
+  };
 
   const [searchParams, setSearchParams] = useSearchParams({ aaa: 'x' });
   console.log('🚀 ~ Item ~ aaa:', searchParams.get('aaa'));

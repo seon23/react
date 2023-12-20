@@ -1,11 +1,13 @@
 import { FormEvent, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context';
 import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 export const Items = () => {
   const {
     session: { cart },
     saveCartItem,
+    removeCartItem,
   } = useSession();
 
   const itemIdRef = useRef<number>(0);
@@ -25,17 +27,17 @@ export const Items = () => {
 
     setDirty(name !== selectedItem.name || price != selectedItem.price);
   };
-  const setCartItem = (id: number) => {
-    itemIdRef.current = id;
-    const selectedItem = cart.find((item) => item.id === id) || {
-      name: '',
-      price: 0,
-    };
-    if (itemNameRef.current && itemPriceRef.current) {
-      itemNameRef.current.value = selectedItem?.name;
-      itemPriceRef.current.value = selectedItem?.price.toString();
-    }
-  };
+  // const setCartItem = (id: number) => {
+  //   itemIdRef.current = id;
+  //   const selectedItem = cart.find((item) => item.id === id) || {
+  //     name: '',
+  //     price: 0,
+  //   };
+  //   if (itemNameRef.current && itemPriceRef.current) {
+  //     itemNameRef.current.value = selectedItem?.name;
+  //     itemPriceRef.current.value = selectedItem?.price.toString();
+  //   }
+  // };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,11 +62,30 @@ export const Items = () => {
 
   return (
     <>
-      <form onSubmit={submit}>
-        <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
-        <input type='number' ref={itemPriceRef} onChange={() => checkDirty()} />
-        {hasDirty && <button type='submit'>Save</button>}
-      </form>
+      <ul>
+        {cart.map(({ id, name, price }: Cart) => (
+          <>
+            <li key={id}>
+              <small>{id}</small>{' '}
+              <Link to={`/items/${id}`} state={{ name, price }}>
+                <strong>{name}</strong>
+              </Link>
+              <small>({price.toLocaleString()}원)</small>
+              <button onClick={() => removeCartItem(id)}>X</button>
+            </li>
+          </>
+        ))}
+
+        <form onSubmit={submit}>
+          <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
+          <input
+            type='number'
+            ref={itemPriceRef}
+            onChange={() => checkDirty()}
+          />
+          {hasDirty && <button type='submit'>Save</button>}
+        </form>
+      </ul>
     </>
   );
 };

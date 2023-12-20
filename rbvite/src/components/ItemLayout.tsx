@@ -5,9 +5,11 @@ export const ItemLayout = () => {
   const {
     session: { cart },
     removeCartItem,
+    // saveCartItem,
   } = useSession();
   return (
     <>
+      <h2>ITEMS</h2>
       <ul>
         {cart.map(({ id, name, price }: Cart) => (
           <>
