@@ -1,16 +1,16 @@
-import { LoginUser } from '../App';
+import { useSession } from '../hooks/session-context';
 
-type Props = {
-  loginUser: LoginUser;
-  logout: () => void;
-};
-
-const Profile = ({ loginUser, logout }: Props) => {
+const Profile = () => {
   console.log('@@@Profile');
+
+  const {
+    session: { loginUser },
+    logout,
+  } = useSession();
   return (
     <>
       <div>
-        User Name: <strong>{loginUser.name}</strong>
+        User Name: <strong>{loginUser?.name}</strong>
       </div>
       <button onClick={logout}>Logout</button>
     </>
