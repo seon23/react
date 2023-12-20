@@ -60,31 +60,11 @@ export const Items = () => {
 
   return (
     <>
-      <ul>
-        {cart.map(({ id, name, price }: Cart) => (
-          <>
-            <li key={id}>
-              <small>{id}</small>{' '}
-              {/* <Link to={`/items/${id}`} state={{ name, price }}>
-                <strong>{name}</strong>
-              </Link> */}
-              <strong>{name}</strong>
-              <small>({price.toLocaleString()}원)</small>
-              <button onClick={() => removeCartItem(id)}>X</button>
-            </li>
-          </>
-        ))}
-
-        <form onSubmit={submit}>
-          <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
-          <input
-            type='number'
-            ref={itemPriceRef}
-            onChange={() => checkDirty()}
-          />
-          {hasDirty && <button type='submit'>Save</button>}
-        </form>
-      </ul>
+      <form onSubmit={submit}>
+        <input type='text' ref={itemNameRef} onChange={() => checkDirty()} />
+        <input type='number' ref={itemPriceRef} onChange={() => checkDirty()} />
+        {hasDirty && <button type='submit'>Save</button>}
+      </form>
     </>
   );
 };
