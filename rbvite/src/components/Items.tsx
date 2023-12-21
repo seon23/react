@@ -5,7 +5,7 @@ export const Items = () => {
   const {
     session: { cart },
     saveCartItem,
-    removeCartItem,
+    // removeCartItem,
   } = useSession();
 
   const itemIdRef = useRef<number>(0);
