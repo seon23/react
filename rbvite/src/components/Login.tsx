@@ -20,7 +20,7 @@ const Login = forwardRef((_, handleRef) => {
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
-  console.log('@@@Login');
+  // console.log('@@@Login');
 
   const submit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
