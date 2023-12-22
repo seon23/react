@@ -6,6 +6,7 @@ import {
   useRef,
 } from 'react';
 import { useSession } from '../hooks/session-context';
+import { useCounter } from '../hooks/counter-context';
 
 // export type LoginHandle = {
 //   focusName: () => void;
@@ -14,6 +15,7 @@ import { useSession } from '../hooks/session-context';
 // const Login = forwardRef(({ login }: Props, handleRef) => {
 const Login = forwardRef((_, handleRef) => {
   const { login } = useSession();
+  const { plusCount, minusCount } = useCounter();
 
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -39,6 +41,14 @@ const Login = forwardRef((_, handleRef) => {
   useEffect(() => {
     if (idRef.current) idRef.current.value = '100';
     focusName();
+  }, []);
+
+  useEffect(() => {
+    plusCount();
+
+    return () => {
+      minusCount();
+    };
   }, []);
 
   return (

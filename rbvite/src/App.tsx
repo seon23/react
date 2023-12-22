@@ -37,11 +37,6 @@ function App() {
         // loginHandleRef={loginHandleRef}
         />
       </SessionContextProvider>
-      {/* <div className='card'>
-        <button onClick={plusCount}>
-          count is {count > 0 ? 'Big' : 'Zero'}
-        </button>
-      </div> */}
       <div className='card'>Count: {count}</div>
     </>
   );

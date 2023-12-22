@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Hello = ({ name = 'CCC', age, children }: PropsWithChildren<Props>) => {
-  console.log('Hello.age>>', age);
+  // console.log('Hello.age>>', age);
 
   const helloId = useId();
 

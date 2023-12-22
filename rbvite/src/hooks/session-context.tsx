@@ -1,8 +1,16 @@
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
+// const DEFAULT_SESSION = {
+//   loginUser: null,
+//   cart: [],
+// };
 const DEFAULT_SESSION = {
   loginUser: null,
-  cart: [],
+  cart: [
+    { id: 100, name: '라면1', price: 3000 },
+    { id: 101, name: '컵라면2', price: 2000 },
+    { id: 102, name: '파3', price: 5000 },
+  ],
 };
 
 type SessionContextProps = {
@@ -10,7 +18,7 @@ type SessionContextProps = {
   login: ({ id, name }: LoginUser) => void;
   logout: () => void;
   // 여기서는 type 안 맞춰주어도 되나?
-  saveCartItem: (name: string, price: number) => void;
+  saveCartItem: (id: number, name: string, price: number) => void;
   removeCartItem: (itemId: number) => void;
 };
 
@@ -41,17 +49,28 @@ const SessionContextProvider = ({ children }: PropsWithChildren) => {
   const logout = () => {
     setSession({ ...session, loginUser: null });
   };
-  const saveCartItem = (name: string, price: number) => {
-    // const id = Math.max(session.cart.map((cart) => cart.id)) + 1 || 0;
-    const id =
-      (session.cart
-        .map((cart) => cart.id)
-        .sort()
-        .at(-1) || 0) + 1;
+  const saveCartItem = (id: number, name: string, price: number) => {
+    // const id =
+    //   (session.cart
+    //     .map((cart) => cart.id)
+    //     .sort()
+    //     .at(-1) || 0) + 1;
+
+    const { cart } = session;
+    id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
+
+    const item = cart.find((item) => item.id === id);
+
+    if (item) {
+      item.name = name;
+      item.price = price;
+    } else {
+      cart.push({ id, name, price });
+    }
 
     setSession({
       ...session,
-      cart: [...session.cart, { id, name, price }],
+      cart: [...cart],
     });
   };
 
