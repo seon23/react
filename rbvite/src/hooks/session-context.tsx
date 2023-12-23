@@ -1,17 +1,23 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-// const DEFAULT_SESSION = {
-//   loginUser: null,
-//   cart: [],
-// };
 const DEFAULT_SESSION = {
   loginUser: null,
-  cart: [
-    { id: 100, name: '라면1', price: 3000 },
-    { id: 101, name: '컵라면2', price: 2000 },
-    { id: 102, name: '파3', price: 5000 },
-  ],
+  cart: [],
 };
+// const DEFAULT_SESSION = {
+//   loginUser: null,
+//   cart: [
+//     { id: 100, name: '라면1', price: 3000 },
+//     { id: 101, name: '컵라면2', price: 2000 },
+//     { id: 102, name: '파3', price: 5000 },
+//   ],
+// };
 
 type SessionContextProps = {
   session: Session;
@@ -34,6 +40,18 @@ const SessionContext = createContext<SessionContextProps>({
 const SessionContextProvider = ({ children }: PropsWithChildren) => {
   const [session, setSession] = useState<Session>(DEFAULT_SESSION);
 
+  const url = '/data/sample.json';
+  useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+    fetch(url, { signal })
+      .then((res) => res.json())
+      .then((data) => setSession(data))
+      .then(() => console.log('초기 data 세팅 완료!'));
+
+    return () => controller.abort();
+  }, []);
+
   // const loginHandleRef = useRef<LoginHandle>(null);
 
   const login = ({ id, name }: LoginUser) => {
@@ -50,12 +68,6 @@ const SessionContextProvider = ({ children }: PropsWithChildren) => {
     setSession({ ...session, loginUser: null });
   };
   const saveCartItem = (id: number, name: string, price: number) => {
-    // const id =
-    //   (session.cart
-    //     .map((cart) => cart.id)
-    //     .sort()
-    //     .at(-1) || 0) + 1;
-
     const { cart } = session;
     id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
 

@@ -1,4 +1,9 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useReducer,
+} from 'react';
 
 type CounterContextProps = {
   count: number;
@@ -12,16 +17,23 @@ const CounterContext = createContext<CounterContextProps>({
   minusCount: () => {},
 });
 
-export const CounterContextProvider = ({ children }: PropsWithChildren) => {
-  const [count, setCount] = useState(0);
+type Action = { type: string; payload?: number };
+const reducer = (count: number, { type, payload = 1 }: Action) => {
+  switch (type) {
+    case 'plus':
+      return count + payload;
+    case 'minus':
+      return count - payload;
 
-  const plusCount = () => {
-    setCount((count) => count + 1);
-  };
+    default:
+      return count;
+  }
+};
 
-  const minusCount = () => {
-    setCount((count) => count - 1);
-  };
+const CounterContextProvider = ({ children }: PropsWithChildren) => {
+  const [count, dispatch] = useReducer(reducer, 0);
+  const plusCount = () => dispatch({ type: 'plus', payload: 2 });
+  const minusCount = () => dispatch({ type: 'minus' });
 
   return (
     <CounterContext.Provider value={{ count, plusCount, minusCount }}>
@@ -30,5 +42,7 @@ export const CounterContextProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
+const useCounter = () => useContext(CounterContext);
+
 // eslint-disable-next-line react-refresh/only-export-components
-export const useCounter = () => useContext(CounterContext);
+export { CounterContextProvider, useCounter };

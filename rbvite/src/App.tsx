@@ -1,13 +1,15 @@
 import {
   forwardRef,
+  useCallback,
   useEffect,
   // useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import './App.css';
-import Hello from './components/Hello';
+import { MemoHello } from './components/Hello';
 import My from './components/My';
 import { useCounter } from './hooks/counter-context';
 import { SessionContextProvider } from './hooks/session-context';
@@ -42,6 +44,10 @@ function App() {
 
   const childRef = useRef<ChildHandler>(null);
 
+  const helloFn = useCallback(() => 'FN in Hello!', []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const helloAge = useMemo(() => count + 1, []);
+
   return (
     <>
       <strong style={{ float: 'left', color: 'red' }}>{badCount}</strong>
@@ -51,7 +57,8 @@ function App() {
       <button onClick={() => childRef.current?.appendPeriod()}>
         Call Child Component
       </button>
-      <Hello age={32} />
+      {/* <Hello age={32} /> */}
+      <MemoHello age={helloAge} fn={helloFn} />
       <hr />
       <SessionContextProvider>
         <My
