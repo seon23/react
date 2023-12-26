@@ -5,7 +5,11 @@ function App() {
 
   return (
     <>
-      <h1>React + Typescript Project!</h1>
+      <Hello>안녕하세요.</Hello>
+      {/* LoginUser ? <Login /> : <Profile /> */}
+      <Login />
+      <Profile />
+      <My />
     </>
   );
 }
