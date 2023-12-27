@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSession } from '../hooks/session-context';
-import { useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 
 export type OutletContext = {
   // item: Cart;
@@ -21,22 +21,27 @@ export const ItemLayout = () => {
 
   // Link to 대신 Outlet에 currItem 전달하는 방식으로 작성하기.
   const [currItem, setCurrItem] = useState<Cart | null>(null);
+  const itemNameRef = useRef<HTMLInputElement>(null);
+  const itemPriceRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
   const navToItem = (item: Cart) => {
     setCurrItem(item);
     navigate(`/items/${item.id}`);
   };
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const id = Math.max(...cart.map((cart) => cart.id), 0) + 1;
+    const name = itemNameRef.current?.value || '';
+    const price = itemPriceRef.current?.value || 0;
+    saveCartItem(id, name, Number(price));
+  };
   return (
     <>
       Search:{' '}
       <input
         type='text'
-        // interface URLSearchParams {
-        //     ...
-        //     get(name: string): string | null;
-        //     ...
-        // }
         value={searchParams.get('searchStr') || ''}
         onChange={(e) => setSearchParams({ searchStr: e.currentTarget.value })}
       />
@@ -50,9 +55,6 @@ export const ItemLayout = () => {
             <>
               <li key={item.id}>
                 <small>{item.id}</small>{' '}
-                {/* <Link to={`/items/${item.id}`} state={item}>
-                  <strong>{item.name}</strong>
-                </Link> */}
                 <button onClick={() => navToItem(item)}>
                   <strong>{item.name}</strong>
                 </button>
@@ -60,8 +62,12 @@ export const ItemLayout = () => {
               </li>
             </>
           ))}
-        {/* 여기에 추가버튼 만들면 Item.tsx가 추가 input form을 보여줘야하는 건데 */}
       </ul>
+      <form onSubmit={(e) => submit(e)}>
+        <input type='text' ref={itemNameRef} />
+        <input type='number' ref={itemPriceRef} />
+        <button type='submit'>Save</button>
+      </form>
       <div style={{ border: '2px solid green', padding: '2rem' }}>
         {/* <Outlet context={{ item: currItem, saveCartItem }} /> */}
         <Outlet context={{ currItem, saveCartItem, removeCartItem }} />

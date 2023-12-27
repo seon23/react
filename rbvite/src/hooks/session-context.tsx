@@ -134,7 +134,7 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
         item.name = name;
         item.price = price;
       } else {
-        id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
+        // id = id || Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
         cart.push({ id, name, price });
       }
       dispatch({ type: ActionType.SAVE_ITEM, payload: cart });

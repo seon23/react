@@ -42,19 +42,18 @@ export const Item = () => {
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
 
-  // isEditing의 초깃값을 true로 두는 게 맞나?
   // isEditing을 useState로 관리하는 게 맞나?
   const [isEditing, setEditing] = useState(false);
   const [hasDirty, setDirty] = useState(false);
+
+  const handleEditMode = () => {
+    setEditing(!isEditing);
+  };
 
   const checkDirty = () => {
     // const id = itemIdRef.current;
     const name = itemNameRef.current?.value;
     const price = Number(itemPriceRef.current?.value);
-
-    // const selectedItem = !id
-    //   ? { name: '', price: '' }
-    //   : cart.find((item) => item.id === id) || { name: '', price: '' };
 
     setDirty(name !== currItem.name || price !== currItem.price);
   };
@@ -64,18 +63,11 @@ export const Item = () => {
   // update 함수도 session-context에서 만드는 게 맞는 것 같다.
   // (ItemLayout에서 save(add)CartItem 쓰고, Item에서 updateCartItem 쓸 예정)
   const setCartItem = (id: number) => {
-    setEditing(!isEditing);
+    handleEditMode();
     itemNameRef.current?.focus();
     itemIdRef.current = id;
 
-    // const selectedItem = currItem.find((item) => item.id === id) || {
-    //   name: '',
-    //   price: 0,
-    // };
-
     if (itemNameRef.current && itemPriceRef.current) {
-      // itemNameRef.current.value = currItem?.name;
-      // itemPriceRef.current.value = currItem?.price.toString();
       itemNameRef.current.value = currItem.name;
       itemPriceRef.current.value = currItem.price.toString();
     }
@@ -98,15 +90,12 @@ export const Item = () => {
     }
 
     saveCartItem(itemIdRef.current, name, Number(price));
-    setEditing(!isEditing);
+    handleEditMode();
     itemNameRef.current.value = '';
     itemPriceRef.current.value = '';
-    setDirty(!isEditing);
+    setDirty(!hasDirty);
   };
 
-  const cancleEdit = () => {
-    setEditing(!isEditing);
-  };
   return (
     <>
       {/* {item?.id}. {item?.name} ({item?.price.toLocaleString()}원) currItem &&{' '} */}
@@ -130,7 +119,7 @@ export const Item = () => {
               onChange={() => checkDirty()}
             />
             {hasDirty && <button type='submit'>Save</button>}
-            <button onClick={cancleEdit}>Cancle</button>
+            <button onClick={handleEditMode}>Cancle</button>
           </form>
         </>
       )}
