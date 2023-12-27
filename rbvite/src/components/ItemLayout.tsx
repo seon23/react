@@ -6,6 +6,7 @@ export type OutletContext = {
   // item: Cart;
   currItem: Cart;
   saveCartItem: (id: number, name: string, price: number) => void;
+  removeCartItem: (id: number) => void;
 };
 
 export const ItemLayout = () => {
@@ -31,6 +32,11 @@ export const ItemLayout = () => {
       Search:{' '}
       <input
         type='text'
+        // interface URLSearchParams {
+        //     ...
+        //     get(name: string): string | null;
+        //     ...
+        // }
         value={searchParams.get('searchStr') || ''}
         onChange={(e) => setSearchParams({ searchStr: e.currentTarget.value })}
       />
@@ -51,7 +57,6 @@ export const ItemLayout = () => {
                   <strong>{item.name}</strong>
                 </button>
                 <small>({item.price.toLocaleString()}원)</small>
-                <button onClick={() => removeCartItem(item.id)}>X</button>
               </li>
             </>
           ))}

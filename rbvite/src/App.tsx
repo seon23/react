@@ -18,7 +18,9 @@ function App() {
   const { count } = useCounter();
   //   const fn = useCallback(() => 'FN!', []);
   // 이부분 어떻게?
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const age = useMemo(() => count + 1, []);
+
   return (
     <SessionContextProvider>
       <Nav />
@@ -33,7 +35,7 @@ function App() {
           <Route index element={<Items />} />
           <Route path='/items/:id' element={<Item />} />
         </Route>
-        <Route path='/hello' element={<MemoHello age={0} />} />
+        <Route path='/hello' element={<MemoHello age={age} />} />
         <Route path='/*' element={<NotFound />}></Route>
       </Routes>
     </SessionContextProvider>

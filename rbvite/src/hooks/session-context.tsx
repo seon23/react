@@ -117,10 +117,13 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
     }
     dispatch({ type: ActionType.LOGIN, payload: { id, name } });
   }, []);
+
   const logout = useCallback(() => {
     dispatch({ type: ActionType.LOGOUT, payload: null });
     // }, [session]);
   }, []);
+
+  // update 기능도 겸하는
   const saveCartItem = useCallback(
     (id: number, name: string, price: number) => {
       const { cart } = session;
@@ -136,8 +139,10 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
       }
       dispatch({ type: ActionType.SAVE_ITEM, payload: cart });
     },
+
     [session]
   );
+
   const removeCartItem = useCallback((itemId: number) => {
     dispatch({ type: ActionType.REMOVE_ITEM, payload: itemId });
   }, []);
