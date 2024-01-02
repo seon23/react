@@ -39,25 +39,22 @@ export const ItemLayout = () => {
   };
 
   useEffect(() => {
-    if (searchStr) {
-      setItemList(
-        cart
-          .filter((item) => item.name.includes(searchStr))
-          .sort((a, b) => b.id - a.id)
-      );
-    } else setItemList(cart.sort((a, b) => b.id - a.id));
+    const x = cart.sort((a, b) => b.id - a.id);
+    // x = searchStr ? x : x.filter((item) => item.name.includes(searchStr));
+    setItemList(
+      searchStr ? x.filter((item) => item.name.includes(searchStr)) : x
+    );
   }, [cart, searchStr]);
 
   useEffect(() => {
-    const searchedItem = itemList.find((item) => item.name.includes(searchStr));
-    if (searchedItem) {
-      setCurrItem({
-        id: searchedItem.id,
-        name: searchStr,
-        price: searchedItem.price,
-      });
-    } else setCurrItem(null);
-  }, [itemList, searchStr]);
+    // const searchedItem = itemList.find((item) => item.name.includes(searchStr));
+    // setCurrItem({
+    //   id: searchedItem.id,
+    //   name: searchStr,
+    //   price: searchedItem.price,
+    // });
+    setCurrItem(itemList[0]);
+  }, [itemList]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
