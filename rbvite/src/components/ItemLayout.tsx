@@ -1,13 +1,7 @@
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import { useSession } from '../hooks/session-context';
-import { FormEvent, useRef, useState } from 'react';
-
-export type OutletContext = {
-  // item: Cart;
-  currItem: Cart;
-  saveCartItem: (id: number, name: string, price: number) => void;
-  removeCartItem: (id: number) => void;
-};
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
 
 export const ItemLayout = () => {
   const {
@@ -16,18 +10,24 @@ export const ItemLayout = () => {
     saveCartItem,
   } = useSession();
 
-  // const [searchStr, setSearchStr] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams({ searchStr: '' });
+  const [searchParams, setSearchParams] = useSearchParams({
+    searchStr: '',
+  });
+  const searchStr = searchParams.get('searchStr') || '';
 
-  // Link to 대신 Outlet에 currItem 전달하는 방식으로 작성하기.
   const [currItem, setCurrItem] = useState<Cart | null>(null);
+  const [itemList, setItemList] = useState<Cart[]>([]);
+
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
   const navToItem = (item: Cart) => {
     setCurrItem(item);
-    navigate(`/items/${item.id}`);
+  };
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const currStr = e.currentTarget.value;
+    setSearchParams({ searchStr: currStr });
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -37,41 +37,62 @@ export const ItemLayout = () => {
     const price = itemPriceRef.current?.value || 0;
     saveCartItem(id, name, Number(price));
   };
+
+  useEffect(() => {
+    if (searchStr) {
+      setItemList(
+        cart
+          .filter((item) => item.name.includes(searchStr))
+          .sort((a, b) => b.id - a.id)
+      );
+    } else setItemList(cart.sort((a, b) => b.id - a.id));
+  }, [cart, searchStr]);
+
+  useEffect(() => {
+    const searchedItem = itemList.find((item) => item.name.includes(searchStr));
+    if (searchedItem) {
+      setCurrItem({
+        id: searchedItem.id,
+        name: searchStr,
+        price: searchedItem.price,
+      });
+    } else setCurrItem(null);
+  }, [itemList, searchStr]);
+
   return (
-    <>
-      Search:{' '}
-      <input
-        type='text'
-        value={searchParams.get('searchStr') || ''}
-        onChange={(e) => setSearchParams({ searchStr: e.currentTarget.value })}
-      />
-      <h2>ITEMS</h2>
-      <ul>
-        {cart
-          .filter((item) =>
-            item.name.includes(searchParams.get('searchStr') || '')
-          )
-          .map((item) => (
-            <>
-              <li key={item.id}>
-                <small>{item.id}</small>{' '}
-                <button onClick={() => navToItem(item)}>
-                  <strong>{item.name}</strong>
-                </button>
-                <small>({item.price.toLocaleString()}원)</small>
-              </li>
-            </>
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <div style={{ border: '2px black solid' }}>
+        Search:{' '}
+        <input
+          type='text'
+          value={searchStr}
+          placeholder='아이템명'
+          onChange={handleSearch}
+        />
+        <h2>ITEMS</h2>
+        <ul>
+          {itemList?.map((item) => (
+            <li key={item.id}>
+              <small>{item.id}</small>{' '}
+              <button
+                onClick={() => navToItem(item)}
+                className={clsx({ active: item.id === currItem?.id })}
+              >
+                <strong>{item.name}</strong>
+              </button>
+              <small>({item.price.toLocaleString()}원)</small>
+            </li>
           ))}
-      </ul>
-      <form onSubmit={(e) => submit(e)}>
-        <input type='text' ref={itemNameRef} />
-        <input type='number' ref={itemPriceRef} />
-        <button type='submit'>Save</button>
-      </form>
-      <div style={{ border: '2px solid green', padding: '2rem' }}>
-        {/* <Outlet context={{ item: currItem, saveCartItem }} /> */}
+        </ul>
+        <form onSubmit={(e) => submit(e)}>
+          <input type='text' placeholder='아이템명' ref={itemNameRef} />
+          <input type='number' placeholder='가격' ref={itemPriceRef} />
+          <button type='submit'>Save</button>
+        </form>
+      </div>
+      <div style={{ border: '2px solid blue', padding: '2rem' }}>
         <Outlet context={{ currItem, saveCartItem, removeCartItem }} />
       </div>
-    </>
+    </div>
   );
 };

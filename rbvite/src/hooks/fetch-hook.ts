@@ -27,6 +27,7 @@ export const useFetch = <T>(url: string, cachedData?: T) => {
       .catch(console.error);
 
     return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return data;

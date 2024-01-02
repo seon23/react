@@ -1,54 +1,22 @@
-import {
-  // useLocation,
-  // useNavigate,
-  useOutletContext,
-  // useParams,
-} from 'react-router-dom';
-// import { useSession } from '../hooks/session-context';
-// import { useEffect, useState } from 'react';
-import { OutletContext } from './ItemLayout';
-import { FormEvent, useRef, useState } from 'react';
-
-// type SearchParam = {
-//   aaa: string;
-// };
+import { useOutletContext, useSearchParams } from 'react-router-dom';
+import { FormEvent, useReducer, useRef, useState } from 'react';
 
 export const Item = () => {
-  // const {
-  //   session: { cart },
-  // } = useSession();
-
-  // const { currItem, saveCartItem } = useOutletContext<OutletContext>();
-  const { currItem, saveCartItem, removeCartItem } =
-    useOutletContext<OutletContext>();
-
-  // const { id } = useParams();
-
-  // const location = useLocation();
-  // const { state: itemState } = location;
-
-  // item을 상태로 지정한 이유는, useEffect에서 쓰기 위함이다.
-  // const [item, setItem] = useState<Cart | undefined>(undefined);
-
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log('********', currItem);
-  //   const _item = itemState || cart.find((item) => item.id === Number(id));
-  //   if (!_item) navigate('/items');
-  //   setItem(_item);
-  // }, [currItem, navigate, cart, id, itemState]);
+  const { currItem, saveCartItem, removeCartItem } = useOutletContext<{
+    currItem: Cart;
+    saveCartItem: SaveCartItem;
+    removeCartItem: removeCartItem;
+  }>();
 
   const itemIdRef = useRef<number>(0);
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
 
-  // isEditing을 useState로 관리하는 게 맞나?
-  const [isEditing, setEditing] = useState(false);
+  // const [isEditing, setEditing] = useState(false);
+  const [isEditing, toggleEditing] = useReducer((ie) => !ie, false);
   const [hasDirty, setDirty] = useState(false);
 
-  const handleEditMode = () => {
-    setEditing(!isEditing);
-  };
+  const [, setSearchParams] = useSearchParams({ searchStr: '', itemId: '' });
 
   const checkDirty = () => {
     // const id = itemIdRef.current;
@@ -58,20 +26,29 @@ export const Item = () => {
     setDirty(name !== currItem.name || price !== currItem.price);
   };
 
-  // <2023.12.27>
-  // 여기서의 setCartItem은 OutletContext의 currItem을 받았다는 전제 하에 실행되는 건데...
-  // update 함수도 session-context에서 만드는 게 맞는 것 같다.
-  // (ItemLayout에서 save(add)CartItem 쓰고, Item에서 updateCartItem 쓸 예정)
   const setCartItem = (id: number) => {
-    handleEditMode();
     itemNameRef.current?.focus();
     itemIdRef.current = id;
 
     if (itemNameRef.current && itemPriceRef.current) {
       itemNameRef.current.value = currItem.name;
       itemPriceRef.current.value = currItem.price.toString();
+      setSearchParams({ searchStr: itemNameRef.current.value });
     }
+    toggleEditing();
   };
+
+  // useEffect(() => {
+  //   if (itemNameRef.current && itemPriceRef.current) {
+  //     itemNameRef.current.value = currItem.name;
+  //     itemPriceRef.current.value = String(currItem.price);
+  //     itemNameRef.current.select();
+  //   }
+  // }, [currItem, isEditing]);
+
+  // const handleRemove = () => {
+
+  // }
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,39 +67,35 @@ export const Item = () => {
     }
 
     saveCartItem(itemIdRef.current, name, Number(price));
-    handleEditMode();
     itemNameRef.current.value = '';
     itemPriceRef.current.value = '';
     setDirty(!hasDirty);
+    toggleEditing();
   };
 
-  return (
+  return currItem ? (
     <>
-      {/* {item?.id}. {item?.name} ({item?.price.toLocaleString()}원) currItem &&{' '} */}
-      {currItem?.id}. {currItem?.name} ({currItem?.price.toLocaleString()}원)
-      {/* setCartItem 관련 부분 수정 필요 */}
-      {isEditing || (
+      <div>
+        {currItem?.id}. {currItem?.name} ({currItem?.price.toLocaleString()}
+        원)
+      </div>
+      {!isEditing && (
         <button onClick={() => setCartItem(currItem.id)}>Edit</button>
       )}
       <button onClick={() => removeCartItem(currItem.id)}>X</button>
+
       {isEditing && (
-        <>
-          <form onSubmit={submit}>
-            <input
-              type='text'
-              ref={itemNameRef}
-              onChange={() => checkDirty()}
-            />
-            <input
-              type='number'
-              ref={itemPriceRef}
-              onChange={() => checkDirty()}
-            />
-            {hasDirty && <button type='submit'>Save</button>}
-            <button onClick={handleEditMode}>Cancle</button>
-          </form>
-        </>
+        <form onSubmit={submit}>
+          <input type='text' ref={itemNameRef} onChange={checkDirty} />
+          <input type='number' ref={itemPriceRef} onChange={checkDirty} />
+
+          {hasDirty && <button type='submit'>Save</button>}
+
+          <button onClick={toggleEditing}>Cancle</button>
+        </form>
       )}
     </>
+  ) : (
+    <h2>목록에서 아이템을 선택하세요.</h2>
   );
 };

@@ -1,36 +1,50 @@
 import { NavLink } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 export const Nav = () => {
   return (
     <nav>
       <ul>
         <li>
-          <Link to='/' replace>
-            Home
-          </Link>
-        </li>
-        <li>
-          {/* NavLink 구현 */}
           <NavLink
-            to='/test'
-            style={({ isActive }) => (isActive ? { color: 'red' } : {})}
+            to='/'
+            replace
+            className={({ isActive }) => clsx({ bold: isActive })}
           >
-            Test
+            Home
           </NavLink>
         </li>
-
         <li>
-          <Link to='/login'>Login</Link>
+          <NavLink
+            to='/login'
+            className={({ isActive }) => clsx({ bold: isActive })}
+          >
+            Login
+          </NavLink>
         </li>
         <li>
-          <Link to='/my'>My</Link>
+          <NavLink
+            to='/my'
+            className={({ isActive }) => clsx({ bold: isActive })}
+          >
+            My
+          </NavLink>
         </li>
         <li>
-          <Link to='/items'>Items</Link>
+          <NavLink
+            to='/items'
+            className={({ isActive }) => clsx({ bold: isActive })}
+          >
+            Items
+          </NavLink>
         </li>
         <li>
-          <Link to='/hello'>About</Link>
+          <NavLink
+            to='/hello'
+            className={({ isActive }) => clsx({ bold: isActive })}
+          >
+            About
+          </NavLink>
         </li>
       </ul>
     </nav>
