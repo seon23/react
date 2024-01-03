@@ -22,7 +22,6 @@ const Login = () => {
     const id = Number(idRef.current?.value);
     const name = nameRef.current?.value || '';
 
-    // 일단 id = 0도 안 되는 걸로.
     if (!id) {
       alert('아이디를 입력하세요!');
       return focusId();
@@ -36,7 +35,6 @@ const Login = () => {
   };
 
   const focusId = () => {
-    // idRef.current.focus();
     if (idRef.current) idRef.current.focus();
   };
   const focusName = () => {

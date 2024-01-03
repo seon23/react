@@ -28,7 +28,6 @@ export const Item = () => {
   };
 
   const setCartItem = (id: number) => {
-    // itemNameRef.current?.focus();
     itemIdRef.current = id;
 
     if (itemNameRef.current && itemPriceRef.current) {
@@ -41,7 +40,6 @@ export const Item = () => {
 
   const handleRemove = (id: number) => {
     removeCartItem(id);
-    // setSearchParams({ searchStr: '', itemId: '' });
     searchParams.delete('searchStr', 'itemId');
   };
 
@@ -68,7 +66,6 @@ export const Item = () => {
     toggleEditing();
   };
 
-  // itemID 추가
   return currItem ? (
     <>
       <div>

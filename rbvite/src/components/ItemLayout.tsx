@@ -25,7 +25,6 @@ export const ItemLayout = () => {
 
   const handleNav = (item: Cart) => {
     setCurrItem(item);
-    // setSearchParams({ searchStr: item.name, itemId: String(item.id) });
     setSearchParams({ searchStr, itemId: String(item.id) });
   };
 
@@ -41,8 +40,6 @@ export const ItemLayout = () => {
     const price = Number(itemPriceRef.current?.value) || 0;
 
     saveCartItem(id, name, price);
-    // itemNameRef.current?.value = '';
-    // itemPriceRef.current?.value = '';
   };
 
   useEffect(() => {
