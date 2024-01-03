@@ -12,14 +12,12 @@ export const Item = () => {
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
 
-  // const [isEditing, setEditing] = useState(false);
   const [isEditing, toggleEditing] = useReducer((ie) => !ie, false);
   const [hasDirty, setDirty] = useState(false);
 
   const [, setSearchParams] = useSearchParams({ searchStr: '', itemId: '' });
 
   const checkDirty = () => {
-    // const id = itemIdRef.current;
     const name = itemNameRef.current?.value;
     const price = Number(itemPriceRef.current?.value);
 
@@ -27,7 +25,7 @@ export const Item = () => {
   };
 
   const setCartItem = (id: number) => {
-    itemNameRef.current?.focus();
+    // itemNameRef.current?.focus();
     itemIdRef.current = id;
 
     if (itemNameRef.current && itemPriceRef.current) {
@@ -44,11 +42,7 @@ export const Item = () => {
   //     itemPriceRef.current.value = String(currItem.price);
   //     itemNameRef.current.select();
   //   }
-  // }, [currItem, isEditing]);
-
-  // const handleRemove = () => {
-
-  // }
+  // }, [currItem]);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,12 +51,12 @@ export const Item = () => {
     const price = itemPriceRef.current?.value;
 
     if (!name) {
-      alert('상품명을 정확히 입력해 주세요!');
+      alert('상품명을 정확히 입력하십시오.');
       return itemNameRef.current?.focus();
     }
 
     if (!price) {
-      alert('가격을 정확히 입력해 주세요!');
+      alert('상품 가격을 정확히 입력하십시오.');
       return itemPriceRef.current?.focus();
     }
 
@@ -73,30 +67,40 @@ export const Item = () => {
     toggleEditing();
   };
 
-  // itemID
+  // itemID 추가
   return currItem ? (
     <>
       <div>
         {currItem?.id}. {currItem?.name} ({currItem?.price.toLocaleString()}
         원)
+        <button onClick={() => removeCartItem(currItem.id)}>Del</button>
+        {!isEditing && (
+          <button onClick={() => setCartItem(currItem.id)}>Edit</button>
+        )}
       </div>
-      {!isEditing && (
-        <button onClick={() => setCartItem(currItem.id)}>Edit</button>
-      )}
-      <button onClick={() => removeCartItem(currItem.id)}>X</button>
 
       {isEditing && (
         <form onSubmit={submit}>
-          <input type='text' ref={itemNameRef} onChange={checkDirty} />
-          <input type='number' ref={itemPriceRef} onChange={checkDirty} />
-
+          <input
+            type='text'
+            defaultValue={currItem?.name}
+            ref={itemNameRef}
+            onChange={checkDirty}
+          />
+          <br />
+          <input
+            type='number'
+            defaultValue={currItem?.price}
+            ref={itemPriceRef}
+            onChange={checkDirty}
+          />
+          <br />
           {hasDirty && <button type='submit'>Save</button>}
-
           <button onClick={toggleEditing}>Cancle</button>
         </form>
       )}
     </>
   ) : (
-    <h2>목록에서 아이템을 선택하세요.</h2>
+    <h3>목록에서 아이템을 선택하세요.</h3>
   );
 };

@@ -12,8 +12,10 @@ export const ItemLayout = () => {
 
   const [searchParams, setSearchParams] = useSearchParams({
     searchStr: '',
+    itemId: '',
   });
   const searchStr = searchParams.get('searchStr') || '';
+  const itemId = searchParams.get('itemId') || '';
 
   const [currItem, setCurrItem] = useState<Cart | null>(null);
   const [itemList, setItemList] = useState<Cart[]>([]);
@@ -21,58 +23,59 @@ export const ItemLayout = () => {
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
 
-  const navToItem = (item: Cart) => {
+  const handleNav = (item: Cart) => {
     setCurrItem(item);
+    // setSearchParams({ searchStr: item.name, itemId: String(item.id) });
+    setSearchParams({ searchStr, itemId: String(item.id) });
   };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const currStr = e.currentTarget.value;
-    setSearchParams({ searchStr: currStr });
+    const currSearch = e.currentTarget.value;
+    setSearchParams({ searchStr: currSearch, itemId });
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const id = Math.max(...cart.map((cart) => cart.id), 0) + 1;
     const name = itemNameRef.current?.value || '';
-    const price = itemPriceRef.current?.value || 0;
-    saveCartItem(id, name, Number(price));
+    const price = Number(itemPriceRef.current?.value) || 0;
+
+    saveCartItem(id, name, price);
+    // itemNameRef.current?.value = '';
+    // itemPriceRef.current.value = '';
+    setSearchParams({ searchStr: name });
   };
 
   useEffect(() => {
-    const x = cart.sort((a, b) => b.id - a.id);
-    // x = searchStr ? x : x.filter((item) => item.name.includes(searchStr));
+    const sortedCart = cart.sort((a, b) => b.id - a.id);
     setItemList(
-      searchStr ? x.filter((item) => item.name.includes(searchStr)) : x
+      searchStr
+        ? sortedCart.filter((item) => item.name.includes(searchStr))
+        : sortedCart
     );
   }, [cart, searchStr]);
 
   useEffect(() => {
-    // const searchedItem = itemList.find((item) => item.name.includes(searchStr));
-    // setCurrItem({
-    //   id: searchedItem.id,
-    //   name: searchStr,
-    //   price: searchedItem.price,
-    // });
-    setCurrItem(itemList[0]);
-  }, [itemList]);
+    setCurrItem(
+      itemId
+        ? cart.find((item) => item.id === Number(itemId)) || null
+        : itemList[0]
+    );
+  }, [cart, itemList, itemId]);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+    // <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+    <div style={{ display: 'grid', grid: 'auto-flow / 1fr 1fr' }}>
       <div style={{ border: '2px black solid' }}>
         Search:{' '}
-        <input
-          type='text'
-          value={searchStr}
-          placeholder='아이템명'
-          onChange={handleSearch}
-        />
+        <input type='text' placeholder='아이템명' onChange={handleSearch} />
         <h2>ITEMS</h2>
         <ul>
           {itemList?.map((item) => (
             <li key={item.id}>
               <small>{item.id}</small>{' '}
               <button
-                onClick={() => navToItem(item)}
+                onClick={() => handleNav(item)}
                 className={clsx({ active: item.id === currItem?.id })}
               >
                 <strong>{item.name}</strong>
@@ -82,9 +85,11 @@ export const ItemLayout = () => {
           ))}
         </ul>
         <form onSubmit={(e) => submit(e)}>
-          <input type='text' placeholder='아이템명' ref={itemNameRef} />
+          <input type='text' placeholder='상품명' ref={itemNameRef} />
+          <br />
           <input type='number' placeholder='가격' ref={itemPriceRef} />
-          <button type='submit'>Save</button>
+          <br />
+          <button type='submit'>Add</button>
         </form>
       </div>
       <div style={{ border: '2px solid blue', padding: '2rem' }}>

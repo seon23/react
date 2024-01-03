@@ -38,33 +38,7 @@ export const Nav = () => {
             Items
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to='/hello'
-            className={({ isActive }) => clsx({ bold: isActive })}
-          >
-            About
-          </NavLink>
-        </li>
       </ul>
     </nav>
   );
 };
-
-// export const NavLink = ({ style, classNames: Prop }) => {
-//   ...
-
-// useEffect(() => {
-//   if (typeof className ==== 'fn') {
-//   classNames({ isActive: to === location.pathname })
-//       })
-//     }
-//   })
-// }
-
-// <NavLink
-//   to='/my'
-//   style={({ isActive }) => (isActive ? { color: 'red' } : {})}
-// >
-//   My
-// </NavLink>;
