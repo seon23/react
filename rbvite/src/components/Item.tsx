@@ -15,7 +15,10 @@ export const Item = () => {
   const [isEditing, toggleEditing] = useReducer((ie) => !ie, false);
   const [hasDirty, setDirty] = useState(false);
 
-  const [, setSearchParams] = useSearchParams({ searchStr: '', itemId: '' });
+  const [searchParams, setSearchParams] = useSearchParams({
+    searchStr: '',
+    itemId: '',
+  });
 
   const checkDirty = () => {
     const name = itemNameRef.current?.value;
@@ -36,13 +39,11 @@ export const Item = () => {
     toggleEditing();
   };
 
-  // useEffect(() => {
-  //   if (itemNameRef.current && itemPriceRef.current) {
-  //     itemNameRef.current.value = currItem.name;
-  //     itemPriceRef.current.value = String(currItem.price);
-  //     itemNameRef.current.select();
-  //   }
-  // }, [currItem]);
+  const handleRemove = (id: number) => {
+    removeCartItem(id);
+    // setSearchParams({ searchStr: '', itemId: '' });
+    searchParams.delete('searchStr', 'itemId');
+  };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,7 +74,7 @@ export const Item = () => {
       <div>
         {currItem?.id}. {currItem?.name} ({currItem?.price.toLocaleString()}
         원)
-        <button onClick={() => removeCartItem(currItem.id)}>Del</button>
+        <button onClick={() => handleRemove(currItem.id)}>Del</button>
         {!isEditing && (
           <button onClick={() => setCartItem(currItem.id)}>Edit</button>
         )}

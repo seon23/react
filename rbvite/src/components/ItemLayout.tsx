@@ -42,9 +42,12 @@ export const ItemLayout = () => {
 
     saveCartItem(id, name, price);
     // itemNameRef.current?.value = '';
-    // itemPriceRef.current.value = '';
-    setSearchParams({ searchStr: name });
+    // itemPriceRef.current?.value = '';
   };
+
+  useEffect(() => {
+    setCurrItem(null);
+  }, []);
 
   useEffect(() => {
     const sortedCart = cart.sort((a, b) => b.id - a.id);
@@ -64,7 +67,6 @@ export const ItemLayout = () => {
   }, [cart, itemList, itemId]);
 
   return (
-    // <div style={{ display: 'flex', justifyContent: 'space-around' }}>
     <div style={{ display: 'grid', grid: 'auto-flow / 1fr 1fr' }}>
       <div style={{ border: '2px black solid' }}>
         Search:{' '}
