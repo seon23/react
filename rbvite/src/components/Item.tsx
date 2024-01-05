@@ -15,10 +15,11 @@ export const Item = () => {
   const [isEditing, toggleEditing] = useReducer((ie) => !ie, false);
   const [hasDirty, setDirty] = useState(false);
 
-  const [searchParams, setSearchParams] = useSearchParams({
-    searchStr: '',
-    itemId: '',
-  });
+  // const [, setSearchParams] = useSearchParams({
+  //   searchStr: '',
+  //   itemId: '',
+  // });
+  const [, setSearchParams] = useSearchParams();
 
   const checkDirty = () => {
     const name = itemNameRef.current?.value;
@@ -40,7 +41,7 @@ export const Item = () => {
 
   const handleRemove = (id: number) => {
     removeCartItem(id);
-    searchParams.delete('searchStr', 'itemId');
+    setSearchParams();
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {

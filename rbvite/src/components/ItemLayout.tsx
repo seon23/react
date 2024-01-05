@@ -25,7 +25,8 @@ export const ItemLayout = () => {
 
   const handleNav = (item: Cart) => {
     setCurrItem(item);
-    setSearchParams({ searchStr, itemId: String(item.id) });
+    // setSearchParams({ searchStr, itemId: String(item.id) });
+    setSearchParams({ itemId: String(item.id) });
   };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
